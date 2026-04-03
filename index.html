@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            font-family: 'Segoe UI', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; margin: 0; text-align: center;
+        }
+        .container { 
+            background: white; padding: 30px; border-radius: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 400px; position: relative; 
+        }
+        .avatar { 
+            width: 120px; height: 120px; border-radius: 50%; 
+            object-fit: cover; border: 4px solid #e91e63; margin-bottom: 20px; 
+        }
+        .btns { margin-top: 30px; display: flex; justify-content: center; gap: 20px; height: 50px; }
+        button { 
+            padding: 10px 25px; border-radius: 20px; border: none; 
+            cursor: pointer; font-weight: bold; transition: 0.3s; 
+        }
+        #yesBtn { background-color: #e91e63; color: white; }
+        #noBtn { background-color: #ddd; color: #555; position: absolute; }
+        
+        .photo-card { margin-bottom: 30px; text-align: center; }
+        .photo-card img { width: 100%; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .photo-card p { font-style: italic; color: #666; margin-top: 10px; }
+
+        #memories { display: none; overflow-y: auto; max-height: 80vh; padding: 10px; }
+        #musicSelection { display: none; }
+
+        .music-btn {
+            display: block; width: 100%; margin: 10px 0;
+            background: #8e24aa; color: white; padding: 15px; border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шаг 1: Приветствие -->
+    <div id="screen1" class="container">
+        <img src="images/your_photo.jpg" class="avatar">
+        <h2>Ты точно уверена, что хочешь всё оставить в прошлом?</h2>
+        <div class="btns">
+            <button id="yesBtn" onclick="showMusic()">ДА</button>
+            <button id="noBtn" onmouseover="moveNo()" onclick="clickNo()">НЕТ</button>
+        </div>
+    </div>
+
+    <!-- Шаг 2: Выбор музыки -->
+    <div id="musicSelection" class="container">
+        <h2>Выбери музыку для этого момента</h2>
+        <button class="music-btn" onclick="startMemories('music/track1.mp3')">Спокойная мелодия</button>
+        <button class="music-btn" onclick="startMemories('music/track2.mp3')">Наша особенная</button>
+    </div>
+
+    <!-- Шаг 3: Воспоминания -->
+    <div id="memories" class="container">
+        <h2>Наши моменты</h2>
+        <div class="photo-card">
+            <img src="images/memory1.jpg">
+            <p>Помнишь, как мы здесь познакомились? Тот день изменил всё.</p>
+        </div>
+        <div class="photo-card">
+            <img src="images/memory2.jpg">
+            <p>Твоя улыбка здесь — самое ценное, что я храню в памяти.</p>
+        </div>
+        <div class="photo-card">
+            <img src="images/memory3.jpg">
+            <p>Я не хочу тебя принуждать. Просто знай, что я рядом, если ты захочешь дописать нашу историю.</p>
+        </div>
+    </div>
+
+    <audio id="player"></audio>
+
+    <script>
+        let noClicks = 0;
+
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function clickNo() {
+            noClicks++;
+            if (noClicks >= 5) {
+                if (confirm("Ты действительно в этом уверена? Если нажмешь 'ОК', я больше никогда не напомню о себе.")) {
+                    document.body.innerHTML = "<h1 style='color:#333; font-family:sans-serif;'>Прощай. Страница закроется через 5 секунд.</h1>";
+                    setTimeout(() => { window.close(); }, 5000);
+                }
+            }
+        }
+
+        function showMusic() {
+            document.getElementById('screen1').style.display = 'none';
+            document.getElementById('musicSelection').style.display = 'block';
+        }
+
+        function startMemories(trackPath) {
+            const player = document.getElementById('player');
+            player.src = trackPath;
+            player.play();
+            document.getElementById('musicSelection').style.display = 'none';
+            document.getElementById('memories').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
